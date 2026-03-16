@@ -1,0 +1,165 @@
+{
+  "env": {
+    "MCP_TIMEOUT": "300",
+    "ENABLE_TOOL_SEARCH": "true",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"
+  },
+  "permissions": {
+    "allow": [
+      "TodoWrite",
+      "Task",
+      "Skill",
+      "Read",
+      "Glob",
+      "ToolSearch"
+    ]
+  },
+  "enabledPlugins": {
+    "playwright-cli@playwright-cli": true
+  },
+  "outputStyle": "default",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session_startup.sh",
+            "timeout": 15,
+            "statusMessage": "Running startup checklist..."
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/context_reinject.sh",
+            "timeout": 10,
+            "statusMessage": "Re-injecting project context..."
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-init.cjs",
+            "timeout": 15,
+            "statusMessage": "Initializing project detection & env setup..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a documentation compliance checker for a software project that uses CLAUDE.md and JOURNAL.md for tracking.\n\nAnalyze the conversation transcript to determine if Claude should be reminded to update documentation before stopping.\n\nContext: $ARGUMENTS\n\nCheck these conditions:\n1. Were any new files created (new API routes, components, services)? If yes, CLAUDE.md Quick Reference tables may need updating.\n2. Were any significant features implemented or bugs fixed? If yes, JOURNAL.md needs an entry.\n3. Were any architectural decisions made? If yes, CLAUDE.md and/or ARCHITECTURE.md may need updating.\n4. Were any security issues found or fixed? If yes, SECURITY.md needs updating.\n\nIMPORTANT: If stop_hook_active is true in the input, always respond with {\"ok\": true} to prevent infinite loops.\n\nIf no documentation updates are needed, respond: {\"ok\": true}\nIf documentation updates are needed, respond: {\"ok\": false, \"reason\": \"Before stopping, please update: [list specific files]. [Brief explanation of what to add].\"}\n\nOnly flag genuinely significant changes - don't flag minor edits, file reads, or exploratory work.",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ralph-loop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/notifications/notify.cjs",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "senior-backend-engineer|senior-frontend-engineer|database-migration-specialist|devops-engineer",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are an SDLC phase transition quality gate checker.\n\nA sub-agent is being spawned for implementation work. Check if prerequisites are met.\n\nContext: $ARGUMENTS\n\nBased on the agent type being spawned, verify:\n- If this is an implementation agent (senior-backend-engineer, senior-frontend-engineer, database-migration-specialist, devops-engineer): Check that the conversation context mentions specs, plans, or contracts being generated/available. If the conversation shows we're jumping straight to implementation without planning, warn about it.\n- Check that the agent is being given sufficient context about project patterns (service layer, repository pattern, correlation IDs, etc.)\n\nIMPORTANT: Be lenient - only flag clear violations where implementation is starting with zero planning context. Small tasks and bug fixes don't need full SDLC phases.\n\nIf prerequisites appear sufficient or this is a small task: {\"ok\": true}\nIf a clear quality gate violation: {\"ok\": false, \"reason\": \"Quality gate warning: [specific issue]. Consider running [specific phase] first.\"}",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/subagent-init.cjs",
+            "timeout": 10,
+            "statusMessage": "Injecting subagent context..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dev-rules-reminder.cjs",
+            "timeout": 10,
+            "statusMessage": "Checking development rules..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Glob|Grep|Read|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/scout-block.cjs",
+            "timeout": 10,
+            "statusMessage": "Checking path restrictions..."
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/privacy-block.cjs",
+            "timeout": 10,
+            "statusMessage": "Checking privacy restrictions..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/modularization-hook.js",
+            "timeout": 10,
+            "statusMessage": "Checking file size for modularization..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/orchestration_snapshot.sh",
+            "timeout": 15,
+            "statusMessage": "Snapshotting orchestration state..."
+          }
+        ]
+      }
+    ]
+  }
+}
