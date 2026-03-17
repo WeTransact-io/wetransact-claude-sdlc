@@ -179,10 +179,12 @@
 | `/git:pr` | Pull request creation |
 | `/kanban` | Project task board overview |
 
-### SDLC Orchestration (Pre-existing)
+### SDLC Orchestration
 | Command | Description |
 |---------|-------------|
-| `/conductor` | Full SDLC orchestration |
+| `/sdlc:phased` | Full SDLC with human-in-the-loop review gates between each phase |
+| `/sdlc:auto` | Fully automated SDLC — no human gates, task-tracked, for simpler implementations |
+| `/conductor` | Full documentation scaffolding |
 | `/ralph-loop` | Feedback loop execution |
 | `/cancel-ralph` | Cancel active feedback loop |
 
