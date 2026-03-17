@@ -1,7 +1,7 @@
 ---
 name: product-brief-analyst
 description: Product brief analyst that validates, clarifies, and structures raw product briefs before they enter the development pipeline. Use proactively at the START of any new project to ensure requirements are complete, unambiguous, and implementation-ready. Prevents garbage-in-garbage-out by catching issues early. Tech-stack agnostic.
-tools: Read, Glob, Grep, WebFetch, WebSearch, AskUserQuestion
+tools: Read, Glob, Grep, WebFetch, WebSearch, AskUserQuestion, Write
 skills:
   - planning
 model: opus

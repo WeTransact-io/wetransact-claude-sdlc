@@ -1,6 +1,6 @@
 # TCMC Agents — Claude Code SDLC Toolkit
 
-A complete `.claude/` environment that implements an end-to-end **Software Development Lifecycle (SDLC)** for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Clone it into your workspace and get 22 specialized agents, 9 skills, 18 commands, and automated quality gates — all orchestrated through a 10-phase pipeline.
+A complete `.claude/` environment that implements an end-to-end **Software Development Lifecycle (SDLC)** for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Clone it into your workspace and get 22 specialized agents, 9 skills, 20 commands, and automated quality gates — all orchestrated through a 10-phase pipeline.
 
 ```
 Product Brief → Validation → Specification → Planning → Contracts
@@ -19,7 +19,7 @@ Product Brief → Validation → Specification → Planning → Contracts
 - [Quick Start](#quick-start)
 - [Agents (22)](#agents)
 - [Skills (9)](#skills)
-- [Commands (18)](#commands)
+- [Commands (20)](#commands)
 - [Hooks (12 registrations)](#hooks)
 - [Rules (3)](#rules)
 - [Security](#security)
@@ -129,6 +129,8 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 ## Quick Start
 
 ```
+/sdlc:phased          # Full SDLC with human review gates between phases
+/sdlc:auto            # Full SDLC fully automated (for simpler features)
 /plan:hard            # Research + analyze + create implementation plan
 /cook                 # Implement a feature (plan → code → test → review)
 /test                 # Run test suites
@@ -257,10 +259,12 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 | `/git:cm` | Stage all files + create conventional commit |
 | `/git:pr` | Create a pull request |
 
-### Orchestration
+### SDLC Orchestration
 
 | Command | Description |
 |---------|-------------|
+| `/sdlc:phased` | Full SDLC with human-in-the-loop review gates between each phase |
+| `/sdlc:auto` | Fully automated SDLC — task-tracked, no human gates between phases |
 | `/conductor` | Full SDLC documentation scaffolding |
 
 ---
@@ -370,13 +374,14 @@ All hooks exit 0 on internal errors. This prevents a broken hook from blocking C
 │   ├── playwright-cli/
 │   └── task-orchestration/
 │
-├── commands/                     # 18 slash commands
+├── commands/                     # 20 slash commands
 │   ├── conductor.md
 │   ├── cook/
 │   ├── fix/
 │   ├── git/
 │   ├── plan/
-│   └── review/
+│   ├── review/
+│   └── sdlc/                    # /sdlc:phased, /sdlc:auto
 │
 ├── hooks/                        # Hook scripts + libraries
 │   ├── session-init.cjs

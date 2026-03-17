@@ -1,6 +1,6 @@
 # TCMC Agents — Claude Code SDLC Toolkit
 
-A complete `.claude/` environment that implements an end-to-end **Software Development Lifecycle (SDLC)** for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Clone it into your workspace and get 22 specialized agents, 9 skills, 18 commands, and automated quality gates — all orchestrated through a 10-phase pipeline.
+A complete `.claude/` environment that implements an end-to-end **Software Development Lifecycle (SDLC)** for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Clone it into your workspace and get 22 specialized agents, 9 skills, 20 commands, and automated quality gates — all orchestrated through a 10-phase pipeline.
 
 ```
 Product Brief → Validation → Specification → Planning → Contracts
@@ -19,7 +19,7 @@ Product Brief → Validation → Specification → Planning → Contracts
 - [Quick Start](#quick-start)
 - [Agents (22)](#agents)
 - [Skills (9)](#skills)
-- [Commands (18)](#commands)
+- [Commands (20)](#commands)
 - [Hooks (12 registrations)](#hooks)
 - [Rules (3)](#rules)
 - [Security](#security)
@@ -67,21 +67,26 @@ Product Brief → Validation → Specification → Planning → Contracts
 
 ```bash
 # Unix/macOS/WSL
-git clone <repo-url> /tmp/tcmc-agents
-cp -r /tmp/tcmc-agents/.claude/ /path/to/your-project/.claude/
+git clone https://github.com/WeTransact-io/wetransact-claude-sdlc /tmp/tcmc-sdlc
+cp -rn /tmp/tcmc-sdlc/* /path/to/your-project/.claude/
+cp -rn /tmp/tcmc-sdlc/.* /path/to/your-project/.claude/ 2>/dev/null
+rm -rf /tmp/tcmc-sdlc
 
 # Windows (PowerShell)
-git clone <repo-url> $env:TEMP\tcmc-agents
-Copy-Item -Recurse "$env:TEMP\tcmc-agents\.claude" -Destination "C:\path\to\your-project\.claude"
+git clone https://github.com/WeTransact-io/wetransact-claude-sdlc $env:TEMP\tcmc-sdlc
+Copy-Item -Recurse "$env:TEMP\tcmc-sdlc\*" -Destination "C:\path\to\your-project\.claude" `
+-ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:TEMP\tcmc-sdlc"
 ```
 
 Or clone directly into your project:
 
 ```bash
 cd /path/to/your-project
-git clone <repo-url> .claude-tmp
-mv .claude-tmp/.claude .claude
-rm -rf .claude-tmp
+git clone https://github.com/WeTransact-io/wetransact-claude-sdlc /tmp/tcmc-sdlc
+cp -rn /tmp/tcmc-sdlc/* .claude/
+cp -rn /tmp/tcmc-sdlc/.* .claude/ 2>/dev/null
+rm -rf /tmp/tcmc-sdlc
 ```
 
 ### Step 2: Install Playwright CLI (recommended)
@@ -123,6 +128,8 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 ## Quick Start
 
 ```
+/sdlc:phased          # Full SDLC with human review gates between phases
+/sdlc:auto            # Full SDLC fully automated (for simpler features)
 /plan:hard            # Research + analyze + create implementation plan
 /cook                 # Implement a feature (plan → code → test → review)
 /test                 # Run test suites
@@ -251,10 +258,12 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 | `/git:cm` | Stage all files + create conventional commit |
 | `/git:pr` | Create a pull request |
 
-### Orchestration
+### SDLC Orchestration
 
 | Command | Description |
 |---------|-------------|
+| `/sdlc:phased` | Full SDLC with human-in-the-loop review gates between each phase |
+| `/sdlc:auto` | Fully automated SDLC — task-tracked, no human gates between phases |
 | `/conductor` | Full SDLC documentation scaffolding |
 
 ---
@@ -364,13 +373,14 @@ All hooks exit 0 on internal errors. This prevents a broken hook from blocking C
 │   ├── playwright-cli/
 │   └── task-orchestration/
 │
-├── commands/                     # 18 slash commands
+├── commands/                     # 20 slash commands
 │   ├── conductor.md
 │   ├── cook/
 │   ├── fix/
 │   ├── git/
 │   ├── plan/
-│   └── review/
+│   ├── review/
+│   └── sdlc/                    # /sdlc:phased, /sdlc:auto
 │
 ├── hooks/                        # Hook scripts + libraries
 │   ├── session-init.cjs
