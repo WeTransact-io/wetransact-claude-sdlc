@@ -14,10 +14,6 @@
       "ToolSearch"
     ]
   },
-  "enabledPlugins": {
-    "playwright-cli@playwright-cli": true
-  },
-  "outputStyle": "default",
   "hooks": {
     "SessionStart": [
       {
@@ -161,5 +157,9 @@
         ]
       }
     ]
+  },
+  "outputStyle": "default",
+  "enabledPlugins": {
+    "linear@claude-plugins-official": true
   }
 }

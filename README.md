@@ -66,24 +66,25 @@ Product Brief → Validation → Specification → Planning → Contracts
 ### Step 1: Clone the toolkit
 
 ```bash
-# Unix/macOS/WSL
-git clone https://github.com/WeTransact-io/wetransact-claude-sdlc /tmp/tcmc-sdlc
+# Unix/macOS/WSL                                                                              
+git clone https://github.com/WeTransact-io/wetransact-claude-sdlc /tmp/tcmc-sdlc            
 cp -rn /tmp/tcmc-sdlc/* /path/to/your-project/.claude/
 cp -rn /tmp/tcmc-sdlc/.* /path/to/your-project/.claude/ 2>/dev/null
 rm -rf /tmp/tcmc-sdlc
 
 # Windows (PowerShell)
-git clone https://github.com/WeTransact-io/wetransact-claude-sdlc $env:TEMP\tcmc-sdlc
-Copy-Item -Recurse "$env:TEMP\tcmc-sdlc\*" -Destination "C:\path\to\your-project\.claude" `
+git clone https://github.com/WeTransact-io/wetransact-claude-sdlc $env:TEMP\tcmc-sdlc       
+Copy-Item -Recurse "$env:TEMP\tcmc-sdlc\*" -Destination "C:\path\to\your-project\.claude"   
 -ErrorAction SilentlyContinue
 Remove-Item -Recurse -Force "$env:TEMP\tcmc-sdlc"
 ```
 
-Or clone directly into your project:
+Or clone directly into your project without overwriting existing files (recommended):
 
 ```bash
 cd /path/to/your-project
 git clone https://github.com/WeTransact-io/wetransact-claude-sdlc /tmp/tcmc-sdlc
+# Copy only new files, never overwrite existing ones (-n = no clobber)
 cp -rn /tmp/tcmc-sdlc/* .claude/
 cp -rn /tmp/tcmc-sdlc/.* .claude/ 2>/dev/null
 rm -rf /tmp/tcmc-sdlc
@@ -478,7 +479,3 @@ coverage
 For complete workflow details, see [SOFTWARE_DEVELOPMENT_LIFECYCLE.md](.claude/SOFTWARE_DEVELOPMENT_LIFECYCLE.md).
 
 ---
-
-## License
-
-MIT
