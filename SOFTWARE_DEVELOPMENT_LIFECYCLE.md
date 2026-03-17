@@ -109,7 +109,6 @@ These agents complement the core SDLC phases with cross-cutting capabilities:
 |-------|-------|-------------|-------------|
 | `debugger` | Sonnet | Systematic debugging with root cause analysis | Phase 8 |
 | `git-manager` | Sonnet | Git operations with conventional commits | Phase 6-8 |
-| `journal-writer` | Sonnet | Technical failure documentation and session journals | Phase 9 |
 
 ---
 
