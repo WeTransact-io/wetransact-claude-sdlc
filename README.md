@@ -34,7 +34,7 @@ Product Brief → Validation → Specification → Planning → Contracts
 - **10-phase SDLC pipeline** — from product brief validation to production deployment
 - **22 specialized sub-agents** — each excels at one domain (planning, backend, frontend, testing, security, DevOps, etc.)
 - **9 composable skills** — reusable workflows for planning, cooking (implement), fixing, testing, debugging, code review, git ops, browser testing, and task orchestration
-- **18 slash commands** — quick-access shortcuts (`/cook`, `/fix`, `/plan`, `/test`, `/git:cm`, `/git:pr`, etc.)
+- **20 slash commands** — quick-access shortcuts (`/cook`, `/fix`, `/plan`, `/test`, `/git:cm`, `/git:pr`, etc.)
 - **Automated quality gates** — hooks enforce dev rules, block credential leaks, detect oversized files, and inject context into sub-agents
 - **Tech-stack agnostic** — agents auto-detect your framework, language, and tooling
 - **Browser testing via Playwright** — visual regression, accessibility audits, form automation
@@ -214,13 +214,13 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 | **code-review** | `/review:codebase` | Structured review with edge case detection |
 | **git** | `/git:cm`, `/git:pr` | Conventional commits, PR creation, secret scanning |
 | **playwright-cli** | — | Browser automation: screenshots, a11y, forms, visual regression |
-| **task-orchestration** | `/kanban` | Parallel workflow orchestration and dependency tracking |
+| **task-orchestration** | `/task-orchestration` | Parallel workflow orchestration and dependency tracking |
 
 ---
 
 ## Commands
 
-18 slash commands organized by workflow stage.
+20 slash commands organized by workflow stage.
 
 ### Planning
 
@@ -266,6 +266,13 @@ export TELEGRAM_CHAT_ID="your-chat-id"
 | `/sdlc:phased` | Full SDLC with human-in-the-loop review gates between each phase |
 | `/sdlc:auto` | Fully automated SDLC — task-tracked, no human gates between phases |
 | `/conductor` | Full SDLC documentation scaffolding |
+
+### Session Control
+
+| Command | Description |
+|---------|-------------|
+| `/ralph-loop` | Start Ralph Loop in the current session |
+| `/cancel-ralph` | Cancel an active Ralph Loop |
 
 ---
 
@@ -376,6 +383,8 @@ All hooks exit 0 on internal errors. This prevents a broken hook from blocking C
 │
 ├── commands/                     # 20 slash commands
 │   ├── conductor.md
+│   ├── ralph-loop.md
+│   ├── cancel-ralph.md
 │   ├── cook/
 │   ├── fix/
 │   ├── git/
