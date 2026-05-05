@@ -191,6 +191,10 @@ Checks for:
 
 **Note**: This checkup is informational only and will never modify the code.
 
+**Secret Handling in SECURITY.md**: When documenting hardcoded secrets or credentials, **never copy the full value**. Always reference the exact file path and line number where the secret appears, then mask the value by showing the first 4 characters, `*****`, and the last 4 characters only.
+
+Example: `API_KEY=shgd*****AKlm` found at `src/config.ts:42`
+
 ## Example Output
 
 After running `conductor`, you'll have:
