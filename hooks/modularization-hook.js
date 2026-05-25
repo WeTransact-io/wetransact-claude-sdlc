@@ -18,6 +18,9 @@ const path = require('path');
 const LOC_THRESHOLD = 200;
 const DEBUG = process.env.MODULARIZATION_HOOK_DEBUG === 'true';
 
+// File types excluded from modularization per project rules.
+const EXCLUDED_EXTENSIONS = new Set(['.md', '.txt', '.sh', '.env', '.json', '.yaml', '.yml', '.toml', '.ini', '.cfg']);
+
 /**
  * Conditionally log diagnostic information to stderr without breaking JSON stdout parsing.
  * Keeping logs opt-in avoids noisy transcripts while still letting us validate hook flow.
@@ -50,6 +53,13 @@ async function main() {
     if (!filePath) {
       debugLog('No file path in payload; skipping.');
       // No file path in payload, skip
+      process.exit(0);
+    }
+
+    // Skip excluded file types (markdown, config, plain text, etc.)
+    const ext = path.extname(filePath).toLowerCase();
+    if (EXCLUDED_EXTENSIONS.has(ext)) {
+      debugLog(`Skipping excluded extension: ${ext}`);
       process.exit(0);
     }
 
