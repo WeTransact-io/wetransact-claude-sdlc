@@ -1,6 +1,6 @@
 {
   "env": {
-    "MCP_TIMEOUT": "300",
+    "MCP_TIMEOUT": "30000",
     "ENABLE_TOOL_SEARCH": "true",
     "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"
   },
