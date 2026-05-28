@@ -138,7 +138,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/modularization-hook.js",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/modularization-hook.cjs",
             "timeout": 10,
             "statusMessage": "Checking file size for modularization..."
           }
